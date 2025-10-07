@@ -1,0 +1,174 @@
+:root {
+    --bg-color: #f9fafb;
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+    --line-color: #d1d5db;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --accent-color: #0d6efd;
+    --gold-color: #ffc107;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+
+h1 { 
+    text-align: center; 
+    font-weight: 700; 
+}
+
+h2 {
+    text-align: center; 
+    font-size: 1.5em; 
+    margin-top: 60px;
+    margin-bottom: 30px; 
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+#loader, #error { 
+    text-align: center; 
+    margin-top: 50px; 
+}
+
+#error { 
+    color: #dc3545; 
+}
+
+.bracket-container, .single-athlete-container {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+.bracket-container::-webkit-scrollbar { 
+    height: 8px; 
+}
+
+.bracket-container::-webkit-scrollbar-track { 
+    background: var(--bg-color); 
+}
+
+.bracket-container::-webkit-scrollbar-thumb { 
+    background-color: var(--line-color); 
+    border-radius: 10px; 
+    border: 2px solid var(--bg-color); 
+}
+
+.bracket { 
+    display: flex; 
+    flex-direction: row; 
+}
+
+.round {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-around;
+    flex-grow: 1; 
+    min-width: 180px;
+}
+
+.match {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    position: relative; 
+    flex-grow: 1; 
+    padding: 10px 0;
+}
+
+.player {
+    background: var(--card-bg); 
+    border: 1px solid var(--border-color);
+    border-radius: 4px; 
+    padding: 8px 10px; 
+    margin: 4px 0;
+    width: 100%; 
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.player .name { 
+    font-weight: 600; 
+    font-size: 0.9em; 
+}
+
+.player .team { 
+    font-size: 0.75em; 
+    color: var(--text-secondary); 
+}
+
+.player.bye { 
+    font-style: italic; 
+    color: var(--text-secondary); 
+    background: #f9fafb; 
+}
+
+.match:not(.is-first-round) .player { 
+    background: #f0f8ff; 
+}
+
+.match-connector { 
+    flex-grow: 1; 
+    display: flex; 
+    align-items: center; 
+    position: relative; 
+}
+
+.match-connector::before {
+    content: ''; 
+    position: absolute; 
+    left: -12px; 
+    top: 0;
+    bottom: 0; 
+    width: 1px; 
+    background-color: var(--line-color);
+}
+
+.match-connector::after {
+    content: ''; 
+    position: absolute; 
+    left: -12px; 
+    top: 50%;
+    width: 12px; 
+    height: 1px; 
+    background-color: var(--line-color);
+}
+
+.final .match-connector { 
+    display: none; 
+}
+
+/* --- NOVO ESTILO PARA ATLETA SOZINHO --- */
+.single-athlete-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--gold-color);
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+    text-align: center;
+}
+
+.single-athlete-card .name { 
+    font-size: 1.2em; 
+    font-weight: 700; 
+}
+
+.single-athlete-card .team { 
+    color: var(--text-secondary); 
+    margin-top: 5px; 
+}
+
+.single-athlete-card .status {
+    margin-top: 15px;
+    font-weight: 600;
+    color: var(--gold-color);
+}
