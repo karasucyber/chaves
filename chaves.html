@@ -1,107 +1,240 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>V Festival de Kimono — Inscrições</title>
-  <meta name="description" content="Demian Maia Jiu-Jitsu.">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Estilos para Toasts (avisos) e Modal (janela de confirmação) */
-    #toast-root{position:fixed;top:18px;right:18px;display:grid;gap:10px;z-index:9999} .toast{display:grid;grid-template-columns:24px 1fr auto;align-items:start;gap:10px;min-width:300px;max-width:min(92vw,420px);padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:linear-gradient(180deg,rgba(25,32,46,.95),rgba(25,32,46,.85));color:#e9eef6;box-shadow:0 16px 50px rgba(0,0,0,.45);animation:toast-in .22s ease-out both} .toast .icon{width:24px;height:24px;display:grid;place-items:center;border-radius:999px} .toast .title{font-weight:800;letter-spacing:.2px;margin-bottom:2px} .toast .msg{color:#b8c3d6;font-size:14px} .toast .close{border:none;background:transparent;color:#9fb0c9;cursor:pointer;font-weight:800;line-height:1;padding:2px 6px;border-radius:8px} .toast .close:hover{color:#fff;background:rgba(255,255,255,.06)} .toast.success{border-color:rgba(56,196,137,.35)} .toast.success .icon{background:rgba(56,196,137,.15)} .toast.success .icon::before{content:"✓";color:#38c489;font-weight:900} .toast.error{border-color:rgba(255,92,92,.35)} .toast.error .icon{background:rgba(255,92,92,.15)} .toast.error .icon::before{content:"✕";color:#ff5c5c;font-weight:900} @keyframes toast-in{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}} @keyframes toast-out{to{opacity:0;transform:translateY(-8px) scale(.98)}} .clock{margin-top:12px;font-weight:700;font-size:18px;color:#e8edf6;text-shadow:0 6px 24px rgba(0,0,0,.45)} .modal-backdrop{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); z-index:9998; backdrop-filter:saturate(140%) blur(4px);} .modal-backdrop.open{ display:grid; } .modal{width:min(560px,94vw); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)); border:1px solid rgba(255,255,255,.12); border-radius:22px; box-shadow:0 24px 80px rgba(0,0,0,.55); color:#e8edf6; overflow:hidden; animation:toast-in .22s ease-out both;} .modal header{padding:16px 18px; display:flex;justify-content:space-between;align-items:center; border-bottom:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); font-weight:800;} .modal .body{ padding:16px 18px; display:grid; gap:10px; } .modal .body .muted{ color:#aab5c6; font-size:14px; } .modal .footer{padding:16px 18px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid rgba(255,255,255,.12);} .btn-primary{appearance:none;border:none;cursor:pointer;font-weight:900;letter-spacing:.3px; background:linear-gradient(180deg, #ffe07a, var(--accent)); color:#11161f; padding:12px 18px; border-radius:999px; box-shadow:0 12px 36px rgba(255,210,74,.35);} .btn-ghost{appearance:none;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04); color:#e9eef6; padding:12px 16px;border-radius:999px;cursor:pointer;font-weight:800;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaves - V Festival EDMJJB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --line-color: #d1d5db;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --accent-color: #0d6efd;
+            --gold-color: #ffc107;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        h1 { text-align: center; font-weight: 700; }
+        h2 {
+            text-align: center; font-size: 1.5em; margin-top: 60px;
+            margin-bottom: 30px; border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        #loader, #error { text-align: center; margin-top: 50px; }
+        #error { color: #dc3545; }
+
+        .bracket-container, .single-athlete-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+        .bracket-container::-webkit-scrollbar { height: 8px; }
+        .bracket-container::-webkit-scrollbar-track { background: var(--bg-color); }
+        .bracket-container::-webkit-scrollbar-thumb { background-color: var(--line-color); border-radius: 10px; border: 2px solid var(--bg-color); }
+
+        .bracket { display: flex; flex-direction: row; }
+        .round {
+            display: flex; flex-direction: column; justify-content: space-around;
+            flex-grow: 1; min-width: 180px;
+        }
+
+        .match {
+            display: flex; flex-direction: column; justify-content: center;
+            position: relative; flex-grow: 1; padding: 10px 0;
+        }
+
+        .player {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 4px; padding: 8px 10px; margin: 4px 0;
+            width: 100%; box-sizing: border-box;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .player .name { font-weight: 600; font-size: 0.9em; }
+        .player .team { font-size: 0.75em; color: var(--text-secondary); }
+        .player.bye { font-style: italic; color: var(--text-secondary); background: #f9fafb; }
+        
+        .match:not(.is-first-round) .player { background: #f0f8ff; }
+        
+        .match-connector { flex-grow: 1; display: flex; align-items: center; position: relative; }
+        .match-connector::before {
+            content: ''; position: absolute; left: -12px; top: 0;
+            bottom: 0; width: 1px; background-color: var(--line-color);
+        }
+        .match-connector::after {
+            content: ''; position: absolute; left: -12px; top: 50%;
+            width: 12px; height: 1px; background-color: var(--line-color);
+        }
+
+        .final .match-connector { display: none; }
+        
+        /* --- NOVO ESTILO PARA ATLETA SOZINHO --- */
+        .single-athlete-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--gold-color);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .single-athlete-card .name { font-size: 1.2em; font-weight: 700; }
+        .single-athlete-card .team { color: var(--text-secondary); margin-top: 5px; }
+        .single-athlete-card .status {
+            margin-top: 15px;
+            font-weight: 600;
+            color: var(--gold-color);
+        }
+
+    </style>
 </head>
 <body>
-
-  <section class="hero">
-    <div class="left">
-      <div class="bg parallax" aria-hidden="true"></div>
+    <h1>V Festival EDMJJB - Chaves do Campeonato</h1>
+    <div id="container">
+        <div id="loader">Carregando atletas e montando chaves...</div>
+        <div id="error"></div>
     </div>
 
-    <div class="right">
-      <div class="panel" id="inscricao">
-        <header>
-          <div class="tag"><span class="dot"></span> Inscrições abertas</div>
-          <div class="tag">Vagas limitadas</div>
-        </header>
-        <div class="content">
-          <form id="form" class="form">
-            <input class="input full" name="Nome" placeholder="Nome completo" required>
-            <input class="input" name="Idade" placeholder="Idade" inputmode="numeric" required>
-            <select class="select" name="Sexo" required>
-                <option value="" disabled selected>Selecione o sexo</option>
-                <option>Masculino</option>
-                <option>Feminino</option>
-            </select>
+    <script>
+        // SEU URL da API já está configurado.
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbzWoD0BMg83Egcd4OZ-SLpSaa7TO0uo8U5TYVKjtYLiZHYu3KVO6YoZvuGAm-XhX7Q/exec';
 
-            <input class="input" name="email" type="email" placeholder="E-mail" required>
-            <input class="input" name="whatsapp" placeholder="WhatsApp (DDD + número)" required>
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        
+        function displayCategories(categories) {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+            if (categories.error) { showError({ message: categories.error }); return; }
+            const sortedKeys = Object.keys(categories).sort();
+            if (sortedKeys.length === 0) { container.innerHTML = '<h2>Nenhum atleta encontrado para as categorias definidas.</h2>'; return; }
             
-            <select class="select" name="Faixa" required>
-                <option value="" disabled selected>Selecione a faixa</option>
-                  <option value="Branca">Branca</option>
-                  <option value="Cinza">Cinza</option>
-                  <option value="Amarela">Amarela</option>
-                  <option value="Laranja">Laranja</option>
-                  <option value="Verde">Verde</option>
-                  <option value="Azul">Azul</option>
-                  <option value="Roxa">Roxa</option>
-                  <option value="Marrom">Marrom</option>
-                  <option value="Preta">Preta</option>
-            </select>
+            sortedKeys.forEach(key => {
+                const athletes = categories[key];
+                const numAthletes = athletes.length;
 
-            <input class="input" name="Peso (kg)" placeholder="Peso com kimono (kg)" inputmode="decimal">
+                // --- MUDANÇA IMPORTANTE AQUI ---
+                // Se tiver apenas 1 atleta, mostra um card especial.
+                if (numAthletes === 1) {
+                    const athlete = athletes[0];
+                    const singleAthleteHTML = `
+                        <div class="single-athlete-container">
+                            <h2>${key} (${numAthletes} atleta)</h2>
+                            <div class="single-athlete-card">
+                                <div class="name">${athlete.nome}</div>
+                                <div class="team">${athlete.equipe}</div>
+                                <div class="status">Único atleta na categoria.</div>
+                            </div>
+                        </div>`;
+                    container.innerHTML += singleAthleteHTML;
+                    return; // Pula para a próxima categoria
+                }
 
-            <select class="select full" name="Equipe" required>
-              <option value="" disabled selected>Selecione sua filial</option>
-              <option>Matriz</option>
-              <option>FALCÕES ARTE & JIU JITSU</option>
-              <option>Alpha Team</option>
-              <option>Centro de Treinamento Arte Suave Osasco</option>
-              <option>CT Barros</option>
-              <option>Escola Cavina de JiuJitsu</option>
-              <option>Índio Jiu Jitsu</option>
-              <option>Jiu Jitsu Traning Lab</option>
-              <option>N&G Jiu Jitsu</option>
-              <option>Osny Almeida Brazilian Jiu-jitsu</option>
-              <option>Studio-MBJJ</option>
-              <option>Team Maurinho</option>
-              <option>Vila Jiu Jitsu – VJJ</option>
-              <option>Strike Machine</option>
-              <option>Cabeuva MMA</option>
-            </select>
+                // Se tiver 2 ou mais atletas, continua com a lógica normal do chaveamento.
+                shuffleArray(athletes);
+                
+                const bracketSize = Math.pow(2, Math.ceil(Math.log2(numAthletes)));
+                const numRounds = Math.log2(bracketSize);
+                
+                let matches = [];
+                let byes = bracketSize - numAthletes;
+                let currentAthletes = [...athletes];
 
-            <input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0">
-            <button class="btn full" type="submit" style="grid-column:1/-1">Enviar inscrição</button>
-          </form>
+                for (let i = 0; i < bracketSize / 2; i++) {
+                    let player1 = null, player2 = null;
+                    if (byes > 0 && (i % 2 !== 0 || currentAthletes.length < 2)) {
+                        player1 = currentAthletes.shift();
+                        player2 = null;
+                        byes--;
+                    } else {
+                        player1 = currentAthletes.shift();
+                        player2 = currentAthletes.shift();
+                    }
+                    matches.push({ p1: player1, p2: player2 });
+                }
 
-          <div class="subline"></div>
-        </div>
-      </div>
-    </div>
-  </section>
+                let bracketHTML = `<div class="bracket-container"><h2>${key} (${numAthletes} atletas)</h2><div class="bracket">`;
+                let lastRoundMatches = matches;
 
-  <div class="footer">© 2025 Festival de Kimono — Demian Maia</div>
+                for (let i = 0; i < numRounds; i++) {
+                    bracketHTML += `<div class="round">`;
+                    
+                    let currentRoundMatches = [];
+                    if (i === 0) {
+                        currentRoundMatches = lastRoundMatches;
+                    } else {
+                        for (let j = 0; j < lastRoundMatches.length / 2; j++) {
+                           currentRoundMatches.push({p1: null, p2: null});
+                        }
+                    }
 
-  <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+                    currentRoundMatches.forEach(match => {
+                         const p1_name = match.p1 ? match.p1.nome : 'Aguardando...';
+                         const p1_team = match.p1 ? match.p1.equipe : '';
+                         const p2_name = match.p2 ? match.p2.nome : 'Aguardando...';
+                         const p2_team = match.p2 ? match.p2.equipe : '';
+                         const p2_class = match.p2 ? '' : 'bye';
 
-  <div id="pay-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="pay-title" aria-hidden="true">
-    <div class="modal">
-      <header>
-        <div id="pay-title">Inscrição registrada</div>
-        <button class="btn-ghost" id="pay-close" aria-label="Fechar">Fechar</button>
-      </header>
-      <div class="body">
-        <div class="muted" id="pay-summary">Obrigado! Confira seus dados e prossiga para o pagamento.</div>
-      </div>
-      <div class="footer">
-        <a id="pay-now" class="btn-primary" rel="noopener" target="_blank">Fazer pagamento</a>
-      </div>
-    </div>
-  </div>
+                         bracketHTML += `
+                            <div class="match ${i === 0 ? 'is-first-round' : ''}">
+                                <div class="player">
+                                    <div class="details"><span class="name">${p1_name}</span><br><span class="team">${p1_team}</span></div>
+                                </div>
+                                <div class="player ${p2_class}">
+                                     <div class="details"><span class="name">${p2_name}</span><br><span class="team">${p2_team}</span></div>
+                                </div>
+                            </div>
+                         `;
+                    });
+                    
+                    if (i < numRounds - 1) {
+                        bracketHTML += '</div><div class="match-connector">'.repeat(currentRoundMatches.length / 2);
+                    } else {
+                         bracketHTML += '</div>';
+                    }
+                     
+                    lastRoundMatches = currentRoundMatches;
+                }
+                bracketHTML += '</div></div>';
+                container.innerHTML += bracketHTML;
+            });
+        }
 
-  <script src="script.js"></script>
-  <noscript><div style="color:#fff;padding:12px">Ative o JavaScript para enviar a inscrição.</div></noscript>
+        function showError(error) {
+            const container = document.getElementById('container');
+            container.innerHTML = '';
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = 'Ocorreu um erro ao carregar os dados: ' + error.message;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) { throw new Error('Erro na rede ou na API: ' + response.statusText); }
+                    return response.json();
+                })
+                .then(data => { displayCategories(data); })
+                .catch(error => { showError(error); });
+        });
+    </script>
 </body>
 </html>
